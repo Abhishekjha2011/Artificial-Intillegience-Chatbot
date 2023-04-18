@@ -1,0 +1,57 @@
+import tkinter as tk
+import speech_recognition as sr
+import pyttsx3
+import openai
+
+# Set your OpenAI API key here
+openai.api_key = "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"
+
+# Initialize the text-to-speech engine
+engine = pyttsx3.init()
+
+# Function to get the chatbot response
+def generate_chatbot_response(query):
+    completions = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=query,
+        max_tokens=2000
+    )
+    response = completions.choices[0].text
+    return response
+
+# Function to handle button click
+def get_response():
+    query = user_input.get()
+    response = generate_chatbot_response(query)
+    chat_display.config(state=tk.NORMAL)
+    chat_display.insert(tk.END, "You: " + query + "\n")
+    chat_display.insert(tk.END, "Bot: " + response + "\n")
+    chat_display.config(state=tk.DISABLED)
+    engine.say(response)
+    engine.runAndWait()
+
+# Create the chatbot GUI
+root = tk.Tk()
+root.title("TalkGPT Chatbot")
+
+# Create input field for user query
+user_input = tk.Entry(root, width=50)
+user_input.pack(pady=10)
+user_input.focus_set() # Set focus to the input field
+
+# Create chat display
+chat_display = tk.Text(root, width=60, height=20)
+chat_display.pack()
+
+# Create scrollbar for chat display
+scrollbar = tk.Scrollbar(root)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+chat_display.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=chat_display.yview)
+
+# Create submit button
+submit_button = tk.Button(root, text="Submit", command=get_response)
+submit_button.pack(pady=10)
+
+# Start the GUI event loop
+root.mainloop()
