@@ -1,0 +1,49 @@
+import random
+
+# Define a dictionary of possible intents and responses
+intents = {
+    "greeting": ["Hello, welcome to our hotel! How can I assist you today?", "Hi there! How may I help you?"],
+    "check_in": ["Sure, I can help you with the check-in process. May I have your reservation details?", "Of course, let me check if we have your reservation. What's your name?"],
+    "check_out": ["Certainly, I can assist you with the check-out process. When are you planning to check-out?", "No problem, let me know when you'd like to check-out and I'll take care of the rest."],
+    "room_service": ["We have a variety of room service options available. Would you like to see the menu?", "Sure thing, I can have our room service menu sent up to your room. What would you like to order?"],
+    "facilities": ["Our hotel has a gym, a pool, and a spa. Which one are you interested in?", "We offer a range of facilities to help make your stay more comfortable. What do you need?"],
+    "goodbye": ["Thank you for staying with us. Have a safe journey!", "It was a pleasure to have you as our guest. We hope to see you again soon."],
+    "fallback": ["I'm sorry, I didn't understand. Could you please rephrase your request?", "I'm not sure what you mean. Can you please provide more details?"]
+}
+
+# Define a function to classify the user's input and return the appropriate response
+def classify_intent(message):
+    message = message.lower()
+    if "hello" in message or "hi" in message:
+        return "greeting"
+    elif "check-in" in message or "reservation" in message:
+        return "check_in"
+    elif "check-out" in message:
+        return "check_out"
+    elif "room service" in message or "order" in message or "menu" in message:
+        return "room_service"
+    elif "gym" in message or "pool" in message or "spa" in message or "facility" in message:
+        return "facilities"
+    elif "goodbye" in message or "bye" in message:
+        return "goodbye"
+    else:
+        return "fallback"
+
+# Define a function to generate a response based on the user's input
+def generate_response(message):
+    intent = classify_intent(message)
+    response = random.choice(intents[intent])
+    return response
+
+# Main program loop
+print("Welcome to the hotel chatbot!")
+print("How can we assist you today?")
+
+while True:
+    message = input("> ")
+    if message.lower() == "exit":
+        print("Thank you for using our chatbot!")
+        break
+    else:
+        response = generate_response(message)
+        print(response)
